@@ -1,6 +1,4 @@
-1287;dr.Bayu;Statistika
-1245;dr.Mangaras;Informatka
-1232;juawa;Mulut
-1223;res;122d
 12323;dr.Astri;Gigi
 9989;dr.turta;organ dalam
+1232;juawa;Mulut
+111;dr.Restu Firmansyah;THT
