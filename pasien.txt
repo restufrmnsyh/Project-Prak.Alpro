@@ -1,0 +1,3 @@
+1234;Zulkifli;13;Kronis
+1245;rtr;21;221
+12322;treu;29;kusta
