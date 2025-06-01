@@ -2,3 +2,4 @@
 9989;dr.turta;organ dalam
 1232;juawa;Mulut
 111;dr.Restu Firmansyah;THT
+124;dr.Sumarno.Sp.OG;Organ Dalam

@@ -1,5 +1,4 @@
-1234;Zulkifli;13;Kronis
-1245;rtr;21;221
-12322;treu;29;kusta
-12342;Nurman;12;Keseleo
-1445;Anisa;27;Demam
+12331;Rayhan;18;Kronis;1
+1234;kuraannnj;123;Malaria;3
+1223;Tuuu;87;Lunglai;4
+12234;ju;12;bisulan;2
