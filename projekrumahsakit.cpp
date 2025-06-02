@@ -12,6 +12,18 @@ struct Pasien {
     int kelaskamar; // 1 = VIP, 2 = Kelas I, 3 = Kelas II, 4 = Kelas III
 };
 
+struct dokter {
+    int id;
+    string nama;
+    string spesialis;
+};
+
+struct JadwalDokter {
+    int idDokter;
+    string hari;
+    string jam;
+};
+
 string namaKelasKamar[4] = {
     "VIP", //int klskamar = 1
     "Kelas I", //int klskamar = 2
@@ -25,19 +37,6 @@ int tarifPerKelas[4] = {
     225000, // Kelas II
     125000  // Kelas III
 };
-
-struct dokter {
-    int id;
-    string nama;
-    string spesialis;
-};
-
-struct JadwalDokter {
-    int idDokter;
-    string hari;
-    string jam;
-};
-
 
 const int MAX_PASIEN = 100;
 const int MAX_DOKTER = 50;
