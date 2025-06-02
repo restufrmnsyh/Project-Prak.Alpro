@@ -1,4 +1,3 @@
-12331;Rayhan;18;Kronis;1
-1234;kuraannnj;123;Malaria;3
-1223;Tuuu;87;Lunglai;4
-12234;ju;12;bisulan;2
+1245;Danar;19;Sakit Gigi;2
+12234;ju;12;bisulan;1
+12122;Mae;32;Batuk;1
