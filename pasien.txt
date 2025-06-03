@@ -1,4 +1,2 @@
-1245;Danar;19;Sakit Gigi;2
-12234;ju;12;bisulan;1
-12122;Mae;32;Batuk;1
-5654;Riska;19;Urip;4
+1222;Akmal;12234;Malaria;1
+1223;Dembele;45;DBD;1

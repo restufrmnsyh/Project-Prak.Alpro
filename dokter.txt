@@ -1,4 +1,1 @@
-9989;dr.turta;organ dalam
-12234;Kukuh;Poliklinik
-12322;Omar;Lutut
-56778;Putra;Hidung
+1432;dr. Tyas, SP.THT-KL;THT-BKL
