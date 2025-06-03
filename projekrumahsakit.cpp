@@ -80,9 +80,6 @@ int depositawal(Pasien pasien[], int index){
 void bacaPasienDariFile(Pasien pasien[], int &jumlahPasien);
 void bacaDokterDariFile(dokter dokterList[], int &jumlahDokter);
 void bacaJadwalDariFile(JadwalDokter jadwalList[], int &jumlahJadwal);
-void simpanPasienKeFile(Pasien p);
-void simpanDokterKeFile(dokter d);
-void simpanJadwalKeFile(JadwalDokter j);
 void tampilkanPasien(Pasien pasien[], int jumlahPasien);
 void tampilkanDokter(dokter dokterList[], int jumlahDokter);
 void tampilkanJadwal(JadwalDokter jadwalList[], int idx,int jumlahJadwal, dokter dokterList[], int jumlahDokter);
@@ -93,6 +90,7 @@ void hapusDokter(dokter dokterList[], int &jumlahDokter, JadwalDokter jadwalList
 void bubbleSortPasien(Pasien arr[], int n);
 void bubbleSortDokter(dokter arr[], int n);
 void tambahJadwal(JadwalDokter jadwalList[], int &jumlahJadwal, dokter dokterList[], int jumlahDokter);
+void hapusJadwalDokter(JadwalDokter jadwalList[], int &jumlahJadwal, dokter dokterList[], int jumlahDokter);
 
 int main() {
     Pasien pasien[MAX_PASIEN];
@@ -129,7 +127,7 @@ int main() {
         } else {
             cout << "Menu tidak tersedia.\n";
         }
-        cout << "\nKembali ke menu utama? (y/n): ";
+        cout << "Kembali ke menu utama? (y/n): ";
         cin >> ulang;
     } while (ulang == 'y' || ulang == 'Y');
 
@@ -139,7 +137,7 @@ int main() {
 bool loginAdmin() {
     int percobaan = 3;
     while (percobaan--) {
-        cout << "\nLogin Admin\n";
+        cout << "===== Login Admin ======\n";
         cout << "Username: "; getline(cin, username);
         cout << "Password: "; getline(cin, password);
         if (username == admin_username && password == admin_pass) {
@@ -151,19 +149,6 @@ bool loginAdmin() {
     }
     return false;
 }
-
-void simpanPasienKeFile(Pasien p) {
-    ofstream file(data_pasien_filename, ios::app);
-    file << p.id << ";" << p.namaPasien << ";" << p.umur << ";" << p.penyakit << "\n";
-    file.close();
-}
-
-void simpanDokterKeFile(dokter d) {
-    ofstream file(data_dokter_filename, ios::app);
-    file << d.id << ";" << d.nama << ";" << d.spesialis << "\n";
-    file.close();
-}
-
 
 void bubbleSortPasien(Pasien arr[], int n) {
     for (int i = 0; i < n - 1; i++) {
@@ -258,6 +243,25 @@ void tampilkanDokter(dokter dokterList[], int jumlahDokter) {
     cout << setfill('-') << setw(55) << "-" << setfill(' ') << endl;
 }
 
+void hapusPasienOpname(const string &id){
+    ifstream file(data_pasien_opname_filename);
+    ofstream tempFile("temp_opname.txt");
+    string line;
+    while(getline(file, line)) {
+        stringstream ss(line);
+        string idStr;
+        getline(ss, idStr, ';');
+        if (idStr != id) {
+            tempFile << line << "\n"; // Simpan baris yang tidak dihapus
+        }
+    }
+    file.close();
+    tempFile.close();
+    // Ganti file asli dengan file sementara
+    remove(data_pasien_opname_filename.c_str());
+    rename("temp_opname.txt", data_pasien_opname_filename.c_str());
+}
+
 void hapusPasien(Pasien pasien[], int &jumlahPasien) {
     string id;
     cout << "Masukkan ID pasien yang ingin dihapus: ";
@@ -273,6 +277,8 @@ void hapusPasien(Pasien pasien[], int &jumlahPasien) {
         }
     }
     if (found) {
+        // Hapus data pasien opname juga jika ada
+        hapusPasienOpname(id);
         ofstream file(data_pasien_filename);
         for (int i = 0; i < jumlahPasien; ++i)
             file << pasien[i].id << ";" << pasien[i].namaPasien << ";" << pasien[i].umur << ";" << pasien[i].penyakit << ";" << pasien[i].kelaskamar <<"\n";
@@ -280,6 +286,14 @@ void hapusPasien(Pasien pasien[], int &jumlahPasien) {
         cout << "[SUCCES]Data pasien berhasil dihapus.\n";
     } else {
         cout << "[FAILED]Data tidak ditemukan.\n";
+    }
+    char ulang;
+    cout << "Ingin Hapus Lagi? (y/n): "; cin >> ulang;
+    if(ulang == 'y' || ulang == 'Y'){
+        tampilkanPasien(pasien, jumlahPasien);
+        hapusPasien(pasien, jumlahPasien);
+    } else {
+        cout << "Kembali ke menu utama.\n";
     }
 }
 
@@ -322,6 +336,14 @@ void hapusDokter(dokter dokterList[], int &jumlahDokter, JadwalDokter jadwalList
         cout << "[SUCCES]Data dokter dan jadwal terkait berhasil dihapus.\n";
     } else {
         cout << "[FAILED]Data tidak ditemukan.\n";
+    }
+    char ulang;
+    cout << "Ingin Hapus Lagi? (y/n): "; cin >> ulang;
+    if(ulang == 'y' || ulang == 'Y'){
+        tampilkanDokter(dokterList, jumlahDokter);
+        hapusDokter(dokterList, jumlahDokter, jadwalList, jumlahJadwal);
+    } else {
+        cout << "Kembali ke menu utama.\n";
     }
 }
 
@@ -398,8 +420,8 @@ void inputPasien(Pasien pasien[], int &jumlahPasien) {
         // Simpan ke file langsung
         file << p.id << ";" << p.namaPasien << ";" << p.umur << ";" << p.penyakit << ";" << p.kelaskamar << "\n";
 
-        cout << "Silakan melakukan pembayaran deposit awal sebesar Rp " 
-             << depositawal(pasien, i) << " ke loket utama.\n";
+        cout << "Silakan melakukan pembayaran deposit awal sebesar Rp" 
+             << depositawal(pasien, jumlahPasien - 1) << " ke loket utama.\n";
         cout << "[SUCCES]Pasien berhasil ditambahkan.\n";
     }
     file.close();
@@ -501,6 +523,20 @@ void tambahJadwal(JadwalDokter jadwalList[], int &jumlahJadwal, dokter dokterLis
         return;
     }
 
+    // Cek apakah jadwal sudah ada untuk dokter ini
+    bool sudahAdaJadwal = false;
+    for (int i = 0; i < jumlahJadwal; i++) {
+        if (jadwalList[i].idDokter == id) {
+            sudahAdaJadwal = true;
+            break;
+        }
+    }
+    if (sudahAdaJadwal) {
+        cout << "Dokter ini sudah memiliki jadwal. Silakan hapus jadwal lama sebelum menambahkan yang baru.\n";
+        tambahJadwal(jadwalList, jumlahJadwal, dokterList, jumlahDokter);
+        return;
+    }
+
     JadwalDokter j;
     j.idDokter = id;
     cout << "Masukkan hari praktek (cth: Senin): ";
@@ -514,6 +550,13 @@ void tambahJadwal(JadwalDokter jadwalList[], int &jumlahJadwal, dokter dokterLis
     file << j.idDokter << ";" << j.hari << ";" << j.jam << endl;
     file.close();
     cout << "[SUCCESS]Jadwal berhasil ditambahkan.\n";
+    char ulang;
+    cout << "Ingin Tambah Jadwal Lagi? (y/n): "; cin >> ulang;
+    if(ulang == 'y' || ulang == 'Y'){
+        tambahJadwal(jadwalList, jumlahJadwal, dokterList, jumlahDokter);
+    } else {
+        cout << "Kembali ke menu utama.\n";
+    }
 }
 
 void bacaJadwalDariFile(JadwalDokter jadwalList[], int &jumlahJadwal) {
@@ -537,26 +580,65 @@ void bacaJadwalDariFile(JadwalDokter jadwalList[], int &jumlahJadwal) {
 }
 
 void tampilkanJadwal(JadwalDokter jadwalList[], int idx, int jumlahJadwal, dokter dokterList[], int jumlahDokter) {
-        if (jumlahJadwal == 0){
-            cout << "Jadwal Belum Ditambahkan.\n";
-            return;
-            system("pause");
-        }
-        if (idx >= jumlahJadwal) return; // Base case untuk rekursi
+    if (jumlahJadwal == 0) {
+        cout << "Belum ada data jadwal dokter.\n";
+        return;
+    }
+    
+    if (idx >= jumlahJadwal) return; // Basis rekursif
 
-        string namaDokter = "Tidak ditemukan";
-        for (int j = 0; j < jumlahDokter; j++) {
-
-            if (jadwalList[idx].idDokter == dokterList[j].id) {
-                namaDokter = dokterList[j].nama;
-                break;
-            }
+    string namaDokter = "Tidak ditemukan";
+    for (int j = 0; j < jumlahDokter; j++) {
+        if (jadwalList[idx].idDokter == dokterList[j].id) {
+            namaDokter = dokterList[j].nama;
+            break;
         }
-        cout << "Nama Dokter: " << namaDokter << endl;
-        cout << "Hari       : " << jadwalList[idx].hari << endl;
-        cout << "Jam        : " << jadwalList[idx].jam << endl;
-        cout << "--------------------------\n";
-        tampilkanJadwal(jadwalList, idx + 1, jumlahJadwal, dokterList, jumlahDokter);
+    }
+    cout << "| ID Dokter   : " << setw(13) << left << jadwalList[idx].idDokter << "|\n";
+    cout << "| Nama Dokter : " << setw(13) << left << namaDokter << "|\n";
+    cout << "| Hari        : " << setw(13) << left << jadwalList[idx].hari << "|\n";
+    cout << "| Jam         : " << setw(13) << left << jadwalList[idx].jam << "|\n";
+    cout << setfill('-') << setw(30) << "-" << setfill(' ') << endl;
+    // Panggil rekursif untuk menampilkan jadwal berikutnya
+    tampilkanJadwal(jadwalList, idx + 1, jumlahJadwal, dokterList, jumlahDokter);
+}
+
+void hapusJadwalDokter(JadwalDokter jadwalList[], int &jumlahJadwal, dokter dokterList[], int jumlahDokter) {
+    if(jumlahJadwal == 0) {
+        cout << "BELUM ADA DATA JADWAL DOKTER.\n";
+        return;
+    }
+    string id;
+    cout << "Masukkan ID dokter yang jadwalnya ingin dihapus: "; cin >> id;
+    bool found = false;
+    for(int i = 0; i < jumlahJadwal; i++){
+        if(jadwalList[i].idDokter == id){
+            found = true;
+            for(int j = i; j < jumlahJadwal - 1; j++)
+                jadwalList[j] = jadwalList[j + 1];
+            jumlahJadwal--;
+            break;
+        }
+    }
+    if(found){
+        // Tulis ulang file jadwal
+        ofstream file(data_jadwal_filename);
+        for(int i = 0; i < jumlahJadwal; i++)
+            file << jadwalList[i].idDokter << ";" << jadwalList[i].hari << ";" << jadwalList[i].jam << endl;
+        file.close();
+        cout << "[SUCCESS]Jadwal dokter berhasil dihapus.\n";
+    } else {
+        cout << "[FAILED]ID dokter tidak ditemukan.\n";
+    }
+    char ulang;
+    cout << "Ingin Hapus Jadwal Lagi? (y/n): "; cin >> ulang;
+    if(ulang == 'y' || ulang == 'Y'){
+        cout << "==== HAPUS JADWAL DOKTER ====\n";
+        tampilkanJadwal(jadwalList, 0, jumlahJadwal, dokterList, jumlahDokter);
+        hapusJadwalDokter(jadwalList, jumlahJadwal, dokterList, jumlahDokter);
+    } else {
+        cout << "Kembali ke menu utama.\n";
+    }
 }
 
 void menuAdmin(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int &jumlahDokter, JadwalDokter jadwalList[], int &jumlahJadwal) {
@@ -601,11 +683,13 @@ void menuAdmin(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int &jum
                 tambahJadwal(jadwalList, jumlahJadwal, dokterList, jumlahDokter);
                 break;
             case 8: 
-                cout << "===== JADWAL DOKTER =====\n";
+                cout << "======= JADWAL DOKTER =======\n";
                 tampilkanJadwal(jadwalList, 0 ,jumlahJadwal, dokterList, jumlahDokter);
                 break;
             case 9: 
-                cout << "LAGI PROSES";
+                cout << "==== HAPUS JADWAL DOKTER ====\n";
+                tampilkanJadwal(jadwalList, 0, jumlahJadwal, dokterList, jumlahDokter);
+                hapusJadwalDokter(jadwalList, jumlahJadwal, dokterList, jumlahDokter);
                 break;        
             case 0: 
                 cout << "Logout berhasil.\n";
@@ -779,7 +863,11 @@ void sequentialSearchPasien(Pasien pasien[], int jumlahpasien){
     if(!ditemukan) {
         cout << "[FAILED]Pasien dengan Nama tersebut tidak ditemukan.\n";
     }
-    system("pause");
+    char ulang;
+    cout << "Ingin Cari Lagi? (y/n): "; cin >> ulang;
+    if(ulang == 'y' || ulang == 'Y'){
+        sequentialSearchPasien(pasien, jumlahpasien);
+    };
 }
 
 void binarySearchDokter(dokter dokterList[], int jumlahDokter){
@@ -829,10 +917,14 @@ void binarySearchDokter(dokter dokterList[], int jumlahDokter){
             }
         }
     }
-
     if (!ditemukan) {
         cout << "[FAILED]Dokter dengan Nama / ID tersebut tidak ditemukan.\n";
     }
+    char ulang;
+    cout << "Ingin Cari Lagi? (y/n): "; cin >> ulang;
+    if (ulang == 'y' || ulang == 'Y') {
+        binarySearchDokter(dokterList, jumlahDokter);
+    };
 }
 
 void menupelanggan(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int jumlahDokter, JadwalDokter jadwalList[], int jumlahJadwal) {
@@ -858,7 +950,7 @@ void menupelanggan(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int 
             daftaropname(pasien, jumlahPasien);
             break;
         case 4: 
-            cout << "===== JADWAL DOKTER =====\n";
+            cout << "======= JADWAL DOKTER =======\n";
             tampilkanJadwal(jadwalList, 0, jumlahJadwal, dokterList, jumlahDokter);
             break;
         case 5: 
@@ -878,4 +970,4 @@ void menupelanggan(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int 
         break;
     }
 }
-//TINGGAL TAMBAHIN CASE 9 MENU ADMIN(HAPUS JADWAL) SAMA CASE 1 MENU PELANGGAN(BEROBAT) SAMA RAPIHIN KODE
+//TINGGAL TAMBAHIN CASE 1 MENU PELANGGAN(BEROBAT) SAMA RAPIHIN KODE

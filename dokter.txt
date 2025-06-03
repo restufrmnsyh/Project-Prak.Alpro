@@ -1,4 +1,4 @@
-12323;dr.Astri;Gigi
-1223;dr.Tatang Mulyono;Bedah
 9989;dr.turta;organ dalam
-1232;juawa;Mulut
+12234;Kukuh;Poliklinik
+12322;Omar;Lutut
+56778;Putra;Hidung
