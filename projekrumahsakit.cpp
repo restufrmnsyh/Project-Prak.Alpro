@@ -130,7 +130,6 @@ int main() {
         cout << "Kembali ke menu utama? (y/n): ";
         cin >> ulang;
     } while (ulang == 'y' || ulang == 'Y');
-
     return 0;
 }
 
@@ -295,9 +294,7 @@ void hapusPasien(Pasien pasien[], int &jumlahPasien) {
     cout << "Ingin Hapus Lagi? (y/n): "; cin >> ulang;
     if(ulang == 'y' || ulang == 'Y'){
         hapusPasien(pasien, jumlahPasien);
-    } else {
-        cout << "Kembali ke menu utama.\n";
-    }
+    } 
 }
 
 void hapusDokter(dokter dokterList[], int &jumlahDokter, JadwalDokter jadwalList[], int &jumlahJadwal) {
@@ -349,9 +346,7 @@ void hapusDokter(dokter dokterList[], int &jumlahDokter, JadwalDokter jadwalList
     cout << "Ingin Hapus Lagi? (y/n): "; cin >> ulang;
     if(ulang == 'y' || ulang == 'Y'){
         hapusDokter(dokterList, jumlahDokter, jadwalList, jumlahJadwal);
-    } else {
-        cout << "Kembali ke menu utama.\n";
-    }
+    } 
 }
 
 bool idPasienSudahAda(Pasien pasien[], int jumlahPasien, string id) {
@@ -568,9 +563,7 @@ void tambahJadwal(JadwalDokter jadwalList[], int &jumlahJadwal, dokter dokterLis
     cout << "Ingin Tambah Jadwal Lagi? (y/n): "; cin >> ulang;
     if(ulang == 'y' || ulang == 'Y'){
         tambahJadwal(jadwalList, jumlahJadwal, dokterList, jumlahDokter);
-    } else {
-        cout << "Kembali ke menu utama.\n";
-    }
+    } 
 }
 
 void bacaJadwalDariFile(JadwalDokter jadwalList[], int &jumlahJadwal) {
@@ -650,9 +643,7 @@ void hapusJadwalDokter(JadwalDokter jadwalList[], int &jumlahJadwal, dokter dokt
                         cout << "======== HAPUS JADWAL DOKTER =========\n";
         tampilkanJadwal(jadwalList, 0, jumlahJadwal, dokterList, jumlahDokter);
         hapusJadwalDokter(jadwalList, jumlahJadwal, dokterList, jumlahDokter);
-    } else {
-        cout << "Kembali ke menu utama.\n";
-    }
+    } 
 }
 
 void menuAdmin(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int &jumlahDokter, JadwalDokter jadwalList[], int &jumlahJadwal) {
@@ -715,6 +706,13 @@ void menuAdmin(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int &jum
                 break;
             default: cout << "Pilihan tidak tersedia.\n";
             break;
+        }
+        cout << "Kembali ke menu admin? (y/n): ";
+        char ulang; cin >> ulang;
+        if (ulang == 'y' || ulang == 'Y') {
+            continue; // Kembali ke menu admin
+        } else {
+            menuadmin = 0; // Keluar dari loop
         }
         system("pause");
     } while (menuadmin != 0);
@@ -869,12 +867,14 @@ void sequentialSearchPasien(Pasien pasien[], int jumlahpasien){
     bool ditemukan = false;
     for(int i=0; i < jumlahpasien; i++){
         if(pasien[i].namaPasien == cari || pasien[i].id == cari){
-            cout << "Data Pasien Ditemukan:\n";
-            cout << "Nama: " << pasien[i].namaPasien << endl;
-            cout << "ID: " << pasien[i].id << endl;
-            cout << "Umur: " << pasien[i].umur << endl;
-            cout << "Penyakit: " << pasien[i].penyakit << endl;
-            cout << "Kelas Kamar: " << kelaskamar(pasien, i) << endl;
+            cout << "Data Pasien Ditemukan di indeks ke-" << i + 1 << endl;
+            cout << "========================================\n";
+            cout << "Nama        : " << pasien[i].namaPasien << endl;
+            cout << "ID          : " << pasien[i].id << endl;
+            cout << "Umur        : " << pasien[i].umur << endl;
+            cout << "Penyakit    : " << pasien[i].penyakit << endl;
+            cout << "Kelas Kamar : " << kelaskamar(pasien, i) << endl;
+            cout << "========================================\n";
             ditemukan = true;
             break;
         } 
@@ -911,10 +911,12 @@ void binarySearchDokter(dokter dokterList[], int jumlahDokter){
     while (left <= right) {
         int mid = left + (right - left) / 2;
         if (dokterList[mid].id == cari || dokterList[mid].nama == cari) {
-            cout << "Data Dokter Ditemukan:\n";
-            cout << "ID: " << dokterList[mid].id << endl;
-            cout << "Nama: " << dokterList[mid].nama << endl;
-            cout << "Spesialis: " << dokterList[mid].spesialis << endl;
+                cout << "===================================\n";
+                cout << "Data Dokter Ditemukan pada indeks ke-" << mid + 1 << endl;
+                cout << "ID          : " << dokterList[mid].id << endl;
+                cout << "Nama        : " << dokterList[mid].nama << endl;
+                cout << "Spesialis   : " << dokterList[mid].spesialis << endl;
+                cout << "===================================\n";
             ditemukan = true;
             break;
         } else if (dokterList[mid].id < cari) {
@@ -927,10 +929,12 @@ void binarySearchDokter(dokter dokterList[], int jumlahDokter){
     if (!ditemukan) {
         for (int i = 0; i < jumlahDokter; i++) {
             if (dokterList[i].nama == cari) {
-                cout << "Data Dokter Ditemukan:\n";
-                cout << "ID: " << dokterList[i].id << endl;
-                cout << "Nama: " << dokterList[i].nama << endl;
-                cout << "Spesialis: " << dokterList[i].spesialis << endl;
+                cout << "===================================\n";
+                cout << "Data Dokter Ditemukan pada indeks ke-" << i + 1 << endl;
+                cout << "ID          : " << dokterList[i].id << endl;
+                cout << "Nama        : " << dokterList[i].nama << endl;
+                cout << "Spesialis   : " << dokterList[i].spesialis << endl;
+                cout << "===================================\n";
                 ditemukan = true;
                 break;
             }
@@ -948,47 +952,58 @@ void binarySearchDokter(dokter dokterList[], int jumlahDokter){
 
 void menupelanggan(Pasien pasien[], int &jumlahPasien, dokter dokterList[], int jumlahDokter, JadwalDokter jadwalList[], int jumlahJadwal) {
     int menupelanggan;
-    cout << "+================================================+\n";
-    cout << "|================ MENU PELANGGAN ================|\n";
-    cout << "| 1. Berobat                                     |\n";
-    cout << "| 2. Jenguk Pasien                               |\n";
-    cout << "| 3. Daftar Opname                               |\n";
-    cout << "| 4. Lihat Jadwal Dokter                         |\n";
-    cout << "| 5. Cari Pasien(Sequential Search)              |\n";
-    cout << "| 6. Cari Dokter(Binary Search)                  |\n";
-    cout << "|0. Exit                                         |\n";
-    cout << "+================================================+\n";
-    cout << "Silakan Pilih menu: ";
-    cin >> menupelanggan;
-    switch (menupelanggan) {
-        case 1:
-            cout << "Silakan menuju loket pendaftaran.\n";
+    do{
+        system("cls");
+        cout << "+================================================+\n";
+        cout << "|================ MENU PELANGGAN ================|\n";
+        cout << "| 1. Berobat                                     |\n";
+        cout << "| 2. Jenguk Pasien                               |\n";
+        cout << "| 3. Daftar Opname                               |\n";
+        cout << "| 4. Lihat Jadwal Dokter                         |\n";
+        cout << "| 5. Cari Pasien(Sequential Search)              |\n";
+        cout << "| 6. Cari Dokter(Binary Search)                  |\n";
+        cout << "| 0. Exit                                        |\n";
+        cout << "+================================================+\n";
+        cout << "Silakan Pilih menu: ";
+        cin >> menupelanggan;
+        switch (menupelanggan) {
+            case 1:
+                cout << "Silakan menuju loket pendaftaran.\n";
+                break;
+            case 2:
+                jengukpasien(pasien, jumlahPasien);
+                break;
+            case 3:
+                daftaropname(pasien, jumlahPasien);
+                break;
+            case 4: 
+                cout << "========== JADWAL DOKTER ===========\n";
+                tampilkanJadwal(jadwalList, 0, jumlahJadwal, dokterList, jumlahDokter);
+                break;
+            case 5: 
+                sequentialSearchPasien(pasien, jumlahPasien);
+                break;
+            case 6: 
+                bubbleSortDokterByID(dokterList, jumlahDokter); // Pastikan data dokter sudah terurut
+                binarySearchDokter(dokterList, jumlahDokter);
+                break;
+            case 0:
+                cout << "\nTerima kasih telah menggunakan sistem kami.\n";
+                exit(0);
+                break;
+            default:
+                cout << "Pilihan tidak tersedia.\n";
+                system("pause");
             break;
-        case 2:
-            jengukpasien(pasien, jumlahPasien);
-            break;
-        case 3:
-            daftaropname(pasien, jumlahPasien);
-            break;
-        case 4: 
-            cout << "========== JADWAL DOKTER ===========\n";
-            tampilkanJadwal(jadwalList, 0, jumlahJadwal, dokterList, jumlahDokter);
-            break;
-        case 5: 
-            sequentialSearchPasien(pasien, jumlahPasien);
-            break;
-        case 6: 
-            bubbleSortDokterByID(dokterList, jumlahDokter); // Pastikan data dokter sudah terurut
-            binarySearchDokter(dokterList, jumlahDokter);
-            break;
-        case 0:
-            cout << "\nTerima kasih telah menggunakan sistem kami.\n";
-            exit(0);
-            break;
-        default:
-            cout << "Pilihan tidak tersedia.\n";
-            system("pause");
-        break;
-    }
+        }
+        cout << "Kembali ke menu pelanggan? (y/n): ";
+        char ulang; cin >> ulang;
+        if (ulang == 'y' || ulang == 'Y') {
+            continue; // Kembali ke menu pelanggan
+        } else {
+            menupelanggan = 0; // Keluar dari loop
+        }
+        system("pause");
+    } while (menupelanggan != 0);
 }
 //TINGGAL TAMBAHIN CASE 1 MENU PELANGGAN(BEROBAT) SAMA RAPIHIN KODE

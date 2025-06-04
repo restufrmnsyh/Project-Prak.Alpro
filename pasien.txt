@@ -1,2 +1,4 @@
-1222;Akmal;12234;Malaria;1
-1223;Dembele;45;DBD;1
+1232;Akmal;17;Maag;4
+1222;Danar;13;Jantung Koroner;4
+1223;Jilani;12;Anemia;3
+1122;caca;18;Bisulan;2
