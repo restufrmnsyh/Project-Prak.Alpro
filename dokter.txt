@@ -1,1 +1,4 @@
-1432;dr. Tyas, SP.THT-KL;THT-BKL
+1111;dr. Tirta, SP.A;Anak
+1112;dr. Rusman, SP.OK;Okupasi
+1222;dr. Yislam, Sp.JP;Jantung dan pembuluh darah
+1000;dr. Anis, Sp.T;Telinga
